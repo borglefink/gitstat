@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -17,34 +18,35 @@ import (
 )
 
 var (
+	mutex    = sync.Mutex{}
 	spinSet  = []string{"| ", "/ ", "- ", "\\ "}
 	spin     = spinner.New(spinSet, 100*time.Millisecond)
 	repodirs = make(sort.StringSlice, 0)
 	startdir = "."
-	mutex    = sync.Mutex{}
 )
 
+// init, makes sure we have a start directory
 func init() {
-	if len(os.Args[1:]) > 0 {
-		startdir = filepath.Base(os.Args[1])
+	flag.Parse()
+	var dir = flag.Arg(0)
+	if dir != "" {
+		startdir = dir
 	}
 }
 
+// foreachEntry is called for each entry in the given directory
 func foreachEntry(entryName string, f os.FileInfo, err error) error {
-	if f == nil {
+	if f == nil || !f.IsDir() || f.Name() != ".git" {
 		return nil
 	}
 
-	if !f.IsDir() {
-		return nil
-	}
+	// Getting the repo dir
+	var dir = strings.Replace(entryName, string(os.PathSeparator)+".git", string(os.PathSeparator), 1)
 
-	if f.Name() != ".git" {
-		return nil
+	// edge case for current directory
+	if dir == ".git" {
+		dir = ""
 	}
-
-	// Getting the working dir
-	var dir = strings.Replace(entryName, ".git", "", 1)
 
 	mutex.Lock()
 	repodirs = append(repodirs, dir)
@@ -53,29 +55,43 @@ func foreachEntry(entryName string, f os.FileInfo, err error) error {
 	return nil
 }
 
+// ensureDir makes sure that the given directory is not empty
+// if empty it is the current directory
+func ensureDir(dir string) string {
+	if dir == "" {
+		return "."
+	}
+
+	return dir
+}
+
+// printStatus runs "git status -s" for the given directory
 func printStatus(workdir string) {
 	var gitdir = workdir + ".git"
-	var cmd = exec.Command("git", "--git-dir="+gitdir, "--work-tree="+workdir, "status", "-s")
+
+	var cmd = exec.Command("git", "--git-dir="+gitdir, "--work-tree="+ensureDir(workdir), "status", "-s")
 
 	var r, w, _ = os.Pipe()
 	cmd.Stdout = w
 	cmd.Stderr = os.Stderr
-	cmd.Run()
-	w.Close()
 
+	cmd.Run()
+
+	w.Close()
 	var status, _ = ioutil.ReadAll(r)
 
 	if len(bytes.TrimSpace(status)) > 0 {
-		var workpath, err = filepath.Abs(workdir)
+		var workpath, err = filepath.Abs(ensureDir(workdir))
 		if err != nil {
 			workpath = workdir
 		}
 
-		fmt.Println(workpath)
-		fmt.Println(string(status))
+		fmt.Printf("\n--- %s ---\n", workpath)
+		fmt.Printf("%v", string(status))
 	}
 }
 
+// main
 func main() {
 	spin.Start()
 	walk.Walk(startdir, foreachEntry)
