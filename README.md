@@ -7,7 +7,7 @@
 Give a directory as a parameter. If none is given, the current directory is used.
 
 ```
-countsource [-c pathtoconfigfile] [-big n] [-debug] [directory] 
+gitstat [directory]
 ```
 
 ## Install
