@@ -20,7 +20,7 @@ and do a **go install**.
 _cntsrc_ is dependent upon Michael T Jones' fast parallel filesystem traversal package. 
 See [github.com/MichaelTJones/walk](https://github.com/MichaelTJones/walk). 
 
-It also uses Brian Downs's spinner package, 
+It also uses Brian Downs' spinner package, 
 [github.com/briandowns/spinner](https://github.com/briandowns/spinner), 
 for showing progress while walking the given directory. 
 
