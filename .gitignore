@@ -1,2 +1,11 @@
+# Visual Studio Code and debug 
+.vscode/
+debug
+debug.config
+
+# Any Windows command files
+*.cmd
+
+# Executables
 gitstat.exe
 gitstat
