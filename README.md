@@ -1,6 +1,6 @@
 ## Description
 
-*gitstat* is a tiny command line utility that finds all git repositories below the given path, and for each runs "git status -s".
+*gitstat* is a tiny command line utility that finds all git repositories below the given path, and for each repository runs *git status -s*.
 
 ## Usage
 
@@ -17,7 +17,7 @@ and do a **go install**.
 
 ## Dependencies
 
-_cntsrc_ is dependent upon Michael T Jones' fast parallel filesystem traversal package. 
+*gitstat* is dependent upon Michael T Jones' fast parallel filesystem traversal package. 
 See [github.com/MichaelTJones/walk](https://github.com/MichaelTJones/walk). 
 
 It also uses Brian Downs' spinner package, 
