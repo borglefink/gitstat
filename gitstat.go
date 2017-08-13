@@ -32,26 +32,19 @@ func init() {
 
 func foreachEntry(entryName string, f os.FileInfo, err error) error {
 	if f == nil {
-		// Just ignore file errors from system
 		return nil
 	}
 
 	if !f.IsDir() {
-		// Ignore files
 		return nil
 	}
 
 	if f.Name() != ".git" {
-		// Ignore everything except .git repositories
 		return nil
 	}
 
+	// Getting the working dir
 	var dir = strings.Replace(entryName, ".git", "", 1)
-
-	// if not found, just ignore
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		return nil
-	}
 
 	mutex.Lock()
 	repodirs = append(repodirs, dir)
