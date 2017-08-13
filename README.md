@@ -1,6 +1,6 @@
 ## Description
 
-*gitstat* is a tiny command line utility that finds all git repositories under the given path, and for each shows the git status.
+*gitstat* is a tiny command line utility that finds all git repositories under the given path, and for each runs "git status -s".
 
 ## Usage
 
@@ -13,7 +13,7 @@ gitstat [directory]
 ## Install
 
 Clone the repository into your GOPATH somewhere and resolve dependencies (see below),
-then do a **go install**.
+and do a **go install**.
 
 ## Dependencies
 
