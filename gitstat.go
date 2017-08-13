@@ -48,8 +48,13 @@ func foreachEntry(entryName string, f os.FileInfo, err error) error {
 		dir = ""
 	}
 
+	var dirpath, patherr = filepath.Abs(ensureDir(dir))
+	if patherr != nil {
+		return nil
+	}
+
 	mutex.Lock()
-	repodirs = append(repodirs, dir)
+	repodirs = append(repodirs, dirpath)
 	mutex.Unlock()
 
 	return nil
@@ -67,7 +72,7 @@ func ensureDir(dir string) string {
 
 // printStatus runs "git status -s" for the given directory
 func printStatus(workdir string) {
-	var gitdir = workdir + ".git"
+	var gitdir = workdir + string(os.PathSeparator) + ".git"
 
 	var cmd = exec.Command("git", "--git-dir="+gitdir, "--work-tree="+ensureDir(workdir), "status", "-s")
 
@@ -81,12 +86,7 @@ func printStatus(workdir string) {
 	var status, _ = ioutil.ReadAll(r)
 
 	if len(bytes.TrimSpace(status)) > 0 {
-		var workpath, err = filepath.Abs(ensureDir(workdir))
-		if err != nil {
-			workpath = workdir
-		}
-
-		fmt.Printf("\n--- %s ---\n", workpath)
+		fmt.Printf("\n--- %s ---\n", workdir)
 		fmt.Printf("%v", string(status))
 	}
 }
