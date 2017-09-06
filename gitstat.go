@@ -27,11 +27,19 @@ var (
 
 // init, makes sure we have a start directory
 func init() {
+	flag.Usage = usage
 	flag.Parse()
 	var dir = flag.Arg(0)
 	if dir != "" {
 		startdir = dir
 	}
+}
+
+// usage
+func usage() {
+	fmt.Printf("\nGITSTAT (C) Copyright 2017 Erlend Johannessen\n")
+	fmt.Printf("Finds all git repositories below the given path, and for each repository runs \"git status -s\".\n")
+	fmt.Printf("Usage: gitstat [dirname] \n\n")
 }
 
 // foreachEntry is called for each entry in the given directory
@@ -86,7 +94,7 @@ func printStatus(workdir string) {
 	var status, _ = ioutil.ReadAll(r)
 
 	if len(bytes.TrimSpace(status)) > 0 {
-		fmt.Printf("\n--- %s ---\n", workdir)
+		fmt.Printf("----- %s -----\n", workdir)
 		fmt.Printf("%v", string(status))
 	}
 }
