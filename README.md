@@ -10,7 +10,9 @@ Give a directory as a parameter. If none is given, the current directory is used
 gitstat [options] [dirname]
 ```
 Option *-a* shows directory name for every git repository, even if there is no status.
-Normally 'git status -s' is shown for each repository, the option *-v* changes it to show the more verbose/normal 'git status'. Use *gitstat -?* for help.
+Normally 'git status -s' is shown for each repository, the option *-l* changes it to show the normal (long) 'git status'. 
+To list ignored files, use the option *-i*.
+Use *gitstat -?* for help.
 
 ## Install
 
