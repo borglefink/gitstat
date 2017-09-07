@@ -7,8 +7,10 @@
 Give a directory as a parameter. If none is given, the current directory is used.
 
 ```
-gitstat [directory]
+gitstat [options] [dirname]
 ```
+Option *-a* shows directory name for every git repository, even if there is no status.
+Normally *gitstat* shows 'git status -s' for eachh repository, the option *-v* changes it to show the more verbose 'git status'. Use *gitstat -?* for help.
 
 ## Install
 
