@@ -23,10 +23,10 @@ var (
 	spin       = spinner.New(spinSet, 100*time.Millisecond)
 	repodirs   = make(sort.StringSlice, 0)
 	startdir   = "."
-	alwaysshow = flag.Bool("a", false, "show directory name, even if there is no status")
-	long       = flag.Bool("l", false, "show normal 'git status'")
-	ignored    = flag.Bool("i", false, "show ignored files by adding the '--ignored' option")
 	help       = flag.Bool("?", false, "show usage and options (this help)")
+	alwaysshow = flag.Bool("a", false, "show directory name, even if there is no status")
+	ignored    = flag.Bool("i", false, "show ignored files by adding the '--ignored' option")
+	long       = flag.Bool("l", false, "show normal 'git status'")
 )
 
 // init, makes sure we have a start directory
