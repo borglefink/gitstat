@@ -34,6 +34,12 @@ go get github.com/MichaelTJones/walk
 go get github.com/briandowns/spinner
 ```
 
+## Background
+
+When working with a lot of different git repositories simultaneously, 
+it's nice to hav a tool that helps to get a larger view of what is going on.
+As usual, this was a tool I needed, and it was fun to make.
+
 ## License
 
 A MIT license is used here - do what you want with this. 
