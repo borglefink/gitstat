@@ -11,7 +11,7 @@ gitstat [options] [dirname]
 ```
 Option *-a* shows directory name for every git repository, even if there is no status.
 Normally 'git status -s' is shown for each repository, the option *-l* changes it to show the normal (long) 'git status'. 
-To list ignored files, use the option *-i*.
+To list ignored files, use the *-i* option.
 Use *gitstat -?* for help.
 
 ## Install
