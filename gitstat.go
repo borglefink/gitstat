@@ -28,10 +28,15 @@ var (
 		false,
 		"show directory even if there is no status",
 	)
-	verbose = flag.Bool(
-		"v",
+	long = flag.Bool(
+		"l",
 		false,
-		"show verbose git status (default is 'git status -s')",
+		"show normal git status",
+	)
+	ignored = flag.Bool(
+		"i",
+		false,
+		"show 'git status --ignored')",
 	)
 	help = flag.Bool(
 		"?",
@@ -111,8 +116,12 @@ func printStatus(workdir string) {
 		"status",
 	}
 
-	if !*verbose {
+	if !*long {
 		args = append(args, "-s")
+	}
+
+	if *ignored {
+		args = append(args, "--ignored")
 	}
 
 	var cmd = exec.Command("git", args...)
