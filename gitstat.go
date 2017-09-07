@@ -26,12 +26,17 @@ var (
 	alwaysshow = flag.Bool(
 		"a",
 		false,
-		"show directory even if there is no status.",
+		"show directory even if there is no status",
 	)
 	verbose = flag.Bool(
 		"v",
 		false,
-		"show verbose git status (default is 'git status -s').",
+		"show verbose git status (default is 'git status -s')",
+	)
+	help = flag.Bool(
+		"?",
+		false,
+		"shows this help",
 	)
 )
 
@@ -39,6 +44,12 @@ var (
 func init() {
 	flag.Usage = usage
 	flag.Parse()
+
+	if *help {
+		usage()
+		os.Exit(0)
+	}
+
 	var dir = flag.Arg(0)
 	if dir != "" {
 		startdir = dir
@@ -49,7 +60,7 @@ func init() {
 func usage() {
 	fmt.Printf("\nGITSTAT (C) Copyright 2017 Erlend Johannessen\n")
 	fmt.Printf("Finds all git repositories below the given path, and for each repository runs \"git status -s\".\n")
-	fmt.Printf("Usage: gitstat [dirname] \n")
+	fmt.Printf("Usage: gitstat [options] [dirname] \n")
 	flag.PrintDefaults()
 	fmt.Printf("\n")
 }
