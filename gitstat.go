@@ -18,11 +18,21 @@ import (
 )
 
 var (
-	mutex    = sync.Mutex{}
-	spinSet  = []string{"| ", "/ ", "- ", "\\ "}
-	spin     = spinner.New(spinSet, 100*time.Millisecond)
-	repodirs = make(sort.StringSlice, 0)
-	startdir = "."
+	mutex      = sync.Mutex{}
+	spinSet    = []string{"| ", "/ ", "- ", "\\ "}
+	spin       = spinner.New(spinSet, 100*time.Millisecond)
+	repodirs   = make(sort.StringSlice, 0)
+	startdir   = "."
+	alwaysshow = flag.Bool(
+		"a",
+		false,
+		"show directory even if there is no status.",
+	)
+	verbose = flag.Bool(
+		"v",
+		false,
+		"show verbose git status (default is 'git status -s').",
+	)
 )
 
 // init, makes sure we have a start directory
@@ -39,7 +49,9 @@ func init() {
 func usage() {
 	fmt.Printf("\nGITSTAT (C) Copyright 2017 Erlend Johannessen\n")
 	fmt.Printf("Finds all git repositories below the given path, and for each repository runs \"git status -s\".\n")
-	fmt.Printf("Usage: gitstat [dirname] \n\n")
+	fmt.Printf("Usage: gitstat [dirname] \n")
+	flag.PrintDefaults()
+	fmt.Printf("\n")
 }
 
 // foreachEntry is called for each entry in the given directory
@@ -82,7 +94,17 @@ func ensureDir(dir string) string {
 func printStatus(workdir string) {
 	var gitdir = workdir + string(os.PathSeparator) + ".git"
 
-	var cmd = exec.Command("git", "--git-dir="+gitdir, "--work-tree="+ensureDir(workdir), "status", "-s")
+	var args = []string{
+		"--git-dir=" + gitdir,
+		"--work-tree=" + ensureDir(workdir),
+		"status",
+	}
+
+	if !*verbose {
+		args = append(args, "-s")
+	}
+
+	var cmd = exec.Command("git", args...)
 
 	var r, w, _ = os.Pipe()
 	cmd.Stdout = w
@@ -93,7 +115,7 @@ func printStatus(workdir string) {
 	w.Close()
 	var status, _ = ioutil.ReadAll(r)
 
-	if len(bytes.TrimSpace(status)) > 0 {
+	if *alwaysshow || len(bytes.TrimSpace(status)) > 0 {
 		fmt.Printf("----- %s -----\n", workdir)
 		fmt.Printf("%v", string(status))
 	}
