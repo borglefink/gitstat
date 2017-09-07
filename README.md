@@ -1,6 +1,6 @@
 ## Description
 
-*gitstat* is a tiny command line utility that finds all git repositories below the given path, and for each repository runs *git status -s*.
+*gitstat* is a tiny command line utility that finds all git repositories below the given path, and for each repository runs *git status -s*, the briefer version of *git status*.
 
 ## Usage
 
@@ -10,7 +10,7 @@ Give a directory as a parameter. If none is given, the current directory is used
 gitstat [options] [dirname]
 ```
 Option *-a* shows directory name for every git repository, even if there is no status.
-Normally *gitstat* shows 'git status -s' for eachh repository, the option *-v* changes it to show the more verbose 'git status'. Use *gitstat -?* for help.
+Normally 'git status -s' is shown for each repository, the option *-v* changes it to show the more verbose/normal 'git status'. Use *gitstat -?* for help.
 
 ## Install
 
